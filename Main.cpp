@@ -15,12 +15,18 @@
 using namespace std;
 
 string PLAleatorio();
-vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*>); 
+vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*>);
+vector<Clientes*> cargarClientes(vector<Clientes*>);
+vector<Administradores*> cargarAdministradores(vector<Administradores*>);
 
 int main(){
 	ofstream file;
-	vector<Usuarios*> lista_usuarios;
+	vector<Clientes*> lista_clientes;
+	//lista_clientes = cargarClientes(lista_clientes);
+	vector<Administradores*> lista_admin;
+	//lista_admin = cargarAdministradores(lista_admin);
 	vector<Vehiculos*> lista_vehiculos;
+	//lista_vehiculos = cargarVehiculos(lista_vehiculos);
 	int opcion = 0, tipo, seguro_social, op_admin;
 	string nombre_usuario, contrasena, cargo, membresia;
 	cout << "      MENU PRINCIPAL     " << endl
@@ -47,12 +53,12 @@ int main(){
 	    		cin >> cargo;
 	    		cout << "Ingrese el número de seguro social: ";
 	    		cin >> seguro_social;
-	    		lista_usuarios.push_back(new Administradores(cargo, seguro_social, nombre_usuario, contrasena));
+	    		lista_admin.push_back(new Administradores(cargo, seguro_social, nombre_usuario, contrasena));
 	    		file.open("Administradores.txt");
-	    		file << nombre_usuario << ", ";
-	    		file << contrasena << ", ";
-	    		file << cargo << ", ";
-	    		file << seguro_social << endl;
+	    		file << nombre_usuario;
+	    		file << contrasena;
+	    		file << cargo;
+	    		file << seguro_social;
 	    		file.close();
 	    	}
 	    	if (tipo == 2) {
@@ -62,111 +68,121 @@ int main(){
 	    		cin >> contrasena;
 	    		cout << "Ingrese el tipo de membresía que tiene: ";
 	    		cin >> membresia;
-	    		lista_usuarios.push_back(new Clientes(membresia, nombre_usuario, contrasena));
+	    		lista_clientes.push_back(new Clientes(membresia, nombre_usuario, contrasena));
 	    		file.open("Clientes.txt");
-	    		file << nombre_usuario << ", ";
-	    		file << contrasena << ", ";
-	    		file << membresia << endl;
+	    		file << nombre_usuario;
+	    		file << contrasena;
+	    		file << membresia;
 	    		file.close();
 	    	}
 	    }
 	    if (opcion == 2) {
-	    	string placa, marca, modelo, resp;
-	    	int anio;
-	    	double precio;
-	    	cout << "Ingrese el nombre de usuario: ";
-	    	cin >> nombre_usuario;
-	    	cout << "Ingrese la contraseña: ";
-	    	cin >> contrasena;
-	    	for (int i = 0; i < lista_usuarios.size(); ++i) {
-	    		if (lista_usuarios.at(i) -> getNombre_usuario() == nombre_usuario && lista_usuarios.at(i) -> getContrasena() == contrasena) {
-	    			if (dynamic_cast<Administradores*>(lista_usuarios.at(i))) {
-	    				while (resp == "n") {
-	    					cout << endl;
-		    				cout << "  MENU ADMINISTRADOR   " << endl
-		    					<< "1.- Agregar Vehículo" << endl
-		    					<< "2.- Modificar" << endl
-		    					<< "3.- Eliminar" << endl
-		    					<< "4.- Listar Carros" << endl;
-		    				cout << "Ingrese la opción que desea realizar: ";
-		    				cin >> op_admin;
-		    				if (op_admin == 1) {
-		    					placa = PLAleatorio();
-		    					cout << "Placa: " << placa << endl;
-		    					cout << "Ingrese la marca del vehículo: ";
-		    					cin >> marca;
-		    					cout << "Ingrese el modelo del vehículo: ";
-		    					cin >> modelo;
-		    					cout << "Ingrese el año del vehículo: ";
-		   						cin >> anio;
+	    	int op_login;
+	    	cout << "   MENU LOGIN    " << endl
+	    		<< "1.- Administrador" << endl
+	    		<< "2.- Cliente" << endl;
+	    	cout << "Ingrese como desea entrar: ";
+	    	cin >> op_login;
+	    	if (op_login == 1) {
+	    		string placa, marca, modelo, resp;
+		    	int anio;
+		    	double precio;
+		    	cout << "Ingrese el nombre de usuario: ";
+		    	cin >> nombre_usuario;
+		    	cout << "Ingrese la contraseña: ";
+		    	cin >> contrasena;
+		    	for (int i = 0; i < lista_admin.size(); ++i) {
+		    		if (lista_admin.at(i) -> getNombre_usuario() == nombre_usuario && lista_admin.at(i) -> getContrasena() == contrasena) {
+		    			while (resp == "n") {
+		    				cout << endl;
+			    			cout << "  MENU ADMINISTRADOR   " << endl
+			   					<< "1.- Agregar Vehículo" << endl
+			    				<< "2.- Modificar" << endl
+			    				<< "3.- Eliminar" << endl
+			    				<< "4.- Listar Carros" << endl;
+			    			cout << "Ingrese la opción que desea realizar: ";
+			   				cin >> op_admin;
+			   				if (op_admin == 1) {
+			   					placa = PLAleatorio();
+			   					cout << "Placa: " << placa << endl;
+			    				cout << "Ingrese la marca del vehículo: ";
+			    				cin >> marca;
+			    				cout << "Ingrese el modelo del vehículo: ";
+			   					cin >> modelo;
+			   					cout << "Ingrese el año del vehículo: ";
+								cin >> anio;
 		   						cout << "Ingrese el precio del vehículo: ";
-		   						cin >> precio;
-		   						lista_vehiculos.push_back(new Vehiculos(placa, marca, modelo, anio, precio, false));
-		   						file.open("Vehículos.txt");
-		   						file << placa << ", ";
-		   						file << marca << ", ";
-		   						file << modelo << ", ";
-		   						file << anio << ", ";
-		   						file << precio << endl;
-		   						file.close();
-		    				}
-		    				if (op_admin == 2) {
-		    					int numero;
-		    					for (int j = 0; j < lista_vehiculos.size(); j++) {
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getPlaca() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getMarca() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getModelo() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getAnio() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getPrecio() << endl;
+								cin >> precio;
+			   					lista_vehiculos.push_back(new Vehiculos(placa, marca, modelo, anio, precio, false));
+			   					file.open("Vehículos.txt");
+			   					file << placa;
+			   					file << marca;
+			   					file << modelo;
+			   					file << anio;
+								file << precio;
+			   					file.close();
+			    			}
+			    			if (op_admin == 2) {
+			    				int numero;
+			    				for (int j = 0; j < lista_vehiculos.size(); j++) {
+			    					cout << j << " >>> " << lista_vehiculos.at(j) -> getPlaca() << endl;
+			    					cout << j << " >>> " << lista_vehiculos.at(j) -> getMarca() << endl;
+			    					cout << j << " >>> " << lista_vehiculos.at(j) -> getModelo() << endl;
+			    					cout << j << " >>> " << lista_vehiculos.at(j) -> getAnio() << endl;
+			    					cout << j << " >>> " << lista_vehiculos.at(j) -> getPrecio() << endl;
+			    				}
+			    				cout << "Ingrese la posición que desea modificar: ";
+			    				cin >> numero;
+			    				placa = PLAleatorio();
+			    				cout << "Placa: " << placa << endl;
+			    				cout << "Ingrese la marca del vehículo: ";
+			   					cin >> marca;
+			    				cout << "Ingrese el modelo del vehículo: ";
+			    				cin >> modelo;
+			    				cout << "Ingrese el año del vehículo: ";
+			   					cin >> anio;
+			   					cout << "Ingrese el precio del vehículo: ";
+			   					cin >> precio;
+								lista_vehiculos.at(numero) -> setPlaca(placa);
+			   					lista_vehiculos.at(numero) -> setMarca(marca);
+			   					lista_vehiculos.at(numero) -> setModelo(modelo);
+			   					lista_vehiculos.at(numero) -> setAnio(anio);
+			   					lista_vehiculos.at(numero) -> setPrecio(precio);
+			    			}
+			    			if (op_admin == 3) {
+			    				int numero;
+			    				for (int j = 0; j < lista_vehiculos.size(); j++) {
+			    					cout << j << " >>> " << lista_vehiculos.at(j) -> getPlaca() << endl;
+			   						cout << j << " >>> " << lista_vehiculos.at(j) -> getMarca() << endl;
+			   						cout << j << " >>> " << lista_vehiculos.at(j) -> getModelo() << endl;
+			   						cout << j << " >>> " << lista_vehiculos.at(j) -> getAnio() << endl;
+			   						cout << j << " >>> " << lista_vehiculos.at(j) -> getPrecio() << endl;
 		    					}
-		    					cout << "Ingrese la posición que desea modificar: ";
-		    					cin >> numero;
-		    					placa = PLAleatorio();
-		    					cout << "Placa: " << placa << endl;
-		    					cout << "Ingrese la marca del vehículo: ";
-		    					cin >> marca;
-		    					cout << "Ingrese el modelo del vehículo: ";
-		    					cin >> modelo;
-		    					cout << "Ingrese el año del vehículo: ";
-		   						cin >> anio;
-		   						cout << "Ingrese el precio del vehículo: ";
-		   						cin >> precio;
-		   						lista_vehiculos.at(numero) -> setPlaca(placa);
-		   						lista_vehiculos.at(numero) -> setMarca(marca);
-		   						lista_vehiculos.at(numero) -> setModelo(modelo);
-		   						lista_vehiculos.at(numero) -> setAnio(anio);
-		   						lista_vehiculos.at(numero) -> setPrecio(precio);
-		    				}
-		    				if (op_admin == 3) {
-		    					int numero;
-		    					for (int j = 0; j < lista_vehiculos.size(); j++) {
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getPlaca() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getMarca() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getModelo() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getAnio() << endl;
-		    						cout << j << " >>> " << lista_vehiculos.at(j) -> getPrecio() << endl;
-		    					}
-		    					cout << "Ingrese la posición que desea modificar: ";
-		    					cin >> numero;
-		    					lista_vehiculos.erase(lista_vehiculos.begin() + numero);
+			    				cout << "Ingrese la posición que desea modificar: ";
+			    				cin >> numero;
+			    				lista_vehiculos.erase(lista_vehiculos.begin() + numero);
 								cout << "Vehículo eliminada exitosamente";
-		    				}
-		    				if (op_admin == 4) {
-		    					vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*> lista_vehiculos); 
-		    				}
+			    			}
+			    			if (op_admin == 4) {
+			    				vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*> lista_vehiculos); 
+			    			}
+			    			cout << "Cerrar Sesión? [s/n]: ";
+			   				cin >> resp;
+		    			}//while
+		    		}//fin if
+		    	}//fin for
+	    	}//fin if op_login
+	    	if (op_login == 2) {
+	    		string resp;
+		    	for (int i = 0; i < lista_clientes.size(); i++) {
+		    		if (lista_clientes.at(i) -> getNombre_usuario() == nombre_usuario && lista_clientes.at(i) -> getContrasena() == contrasena) {
+		    			while (resp == "n") {
+		    				vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*> lista_vehiculos); 
 		    				cout << "Cerrar Sesión? [s/n]: ";
-		    				cin >> resp;
-	    				}//while
-	    			} else if (dynamic_cast<Clientes*>(lista_usuarios.at(i))) {
-	    				while (resp == "n") {
-
-	    					cout << "Cerrar Sesión? [s/n]: ";
-		    				cin >> resp;
-	    				}
-	    			} else {
-	    				cout << "Nombre de usuario o contraseña incorrecto";
-	    			}
-	    		}
+			    			cin >> resp;
+		    			}
+		    		}// fin if
+		    	}//fin for
 	    	}
 	    } // opcion 2
 	    cout << endl;
@@ -259,11 +275,11 @@ vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*> list_veh) {
 		int anio;
 		double precio;
  
-   		archivo >> placa;
-   		archivo >> marca;
-   		archivo >> modelo;
-   		archivo >> anio;
-   		archivo >> precio;
+		archivo >> placa;
+		archivo >> marca;
+		archivo >> modelo;
+		archivo >> anio;
+		archivo >> precio;
  	
  		Vehiculos* vehiculo = new Vehiculos(placa, marca, modelo, anio, precio, false);
 		list_veh.push_back(vehiculo);
