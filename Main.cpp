@@ -178,6 +178,15 @@ int main(){
 		    		if (lista_clientes.at(i) -> getNombre_usuario() == nombre_usuario && lista_clientes.at(i) -> getContrasena() == contrasena) {
 		    			while (resp == "n") {
 		    				vector<Vehiculos*> cargarVehiculos(vector<Vehiculos*> lista_vehiculos); 
+		    				for (int j = 0; j <lista_vehiculos.size(); j++) {
+
+		    				}
+
+
+		    				//No me dio tiempo de terminar la factura, sori :c
+
+
+
 		    				cout << "Cerrar Sesión? [s/n]: ";
 			    			cin >> resp;
 		    			}
